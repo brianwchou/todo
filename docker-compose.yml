@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgresdb:
+    image: postgres
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$POSTGRESDB_USER
+      - POSTGRES_PASSWORD=$POSTGRESDB_PASSWORD
+      - POSTGRES_DB=$POSTGRESDB_NAME
+    ports:
+      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/postgres
+  # client:
+  #   depends_on:
+  #     - app
+  #   build: ./web-client
+  #   restart: unless-stopped
+  #   env_file: ./.env
+  #   volumes:
+  #     - ./web-client:/web-client
+  #     - /web-client/node_modules
+  app:
+    depends_on:
+      - postgresdb
+    build: ./backend
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+      - 9229:9229
+    volumes:
+      - ./backend/:/backend
+      - /backend/node_modules
+    environment:
+      - DATABASE_URL=$PRISMA_URL 
+      - DB_HOST=postgresdb
+      - DB_USER=$POSTGRESDB_USER
+      - DB_PASSWORD=$POSTGRESDB_PASSWORD
+      - DB_NAME=$POSTGRESDB_NAME
+      - DB_PORT=$POSTGRESDB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+
+volumes: 
+  db:
