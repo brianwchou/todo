@@ -30,12 +30,10 @@ services:
     env_file: ./.env
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-      - 9229:9229
     volumes:
       - ./backend/:/backend
       - /backend/node_modules
     environment:
-      - DATABASE_URL=$PRISMA_URL 
       - DB_HOST=postgresdb
       - DB_USER=$POSTGRESDB_USER
       - DB_PASSWORD=$POSTGRESDB_PASSWORD
