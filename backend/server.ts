@@ -24,9 +24,44 @@ app.get("/", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
+  let errors = [];
+  if (username.length === 0) {
+    errors.push({ type: "username", message: "username field is empty" });
+  } else if (password.length === 0) {
+    errors.push({
+      type: "password",
+      message: "password field is empty",
+    });
+  }
+
+  if (errors.length > 0) {
+    res.status(400).json({ errors: errors });
+    return;
+  }
+
   // check if username is in the database
+  let user = await prisma.user.findUnique({ where: { username } });
+  if (user === null) {
+    errors.push({ type: "user", message: "username not found" });
+
+    res.status(400).json({ errors: errors });
+    return;
+  }
 
   // validate password
+  let hash = bcrypt.hashSync(password, user.salt);
+  if (!bcrypt.compareSync(password, user.passwordHash)) {
+    errors.push({ type: "user", message: "password incorrect" });
+  }
+
+  if (errors.length > 0) {
+    res.status(400).json({ errors: errors });
+    return;
+  }
+  // after password validation
+  // session token granted here
+
+  res.status(200).send("ok");
 });
 
 app.post("/signup", async (req, res) => {
@@ -36,10 +71,12 @@ app.post("/signup", async (req, res) => {
   );
   const emailReg = new RegExp("^([w.-]+)@([w-]+)((.(w){2,3})+)$");
 
-  // username regex
-
   type Error = { type: string; message: string };
   let errors: Error[] = [];
+
+  if (username.length === 0) {
+    errors.push({ type: "username", message: "username field is empty" });
+  }
 
   if (password.length === 0) {
     errors.push({
@@ -60,7 +97,7 @@ app.post("/signup", async (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.status(400).json(errors);
+    res.status(400).json({ errors: errors });
     return;
   }
   const salt = bcrypt.genSaltSync(saltRounds);
