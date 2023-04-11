@@ -1,4 +1,4 @@
 #!/bin/bash
 
-npx prisma migrate dev
+npx prisma migrate dev --name init
 nodemon server.ts
