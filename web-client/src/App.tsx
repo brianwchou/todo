@@ -1,47 +1,42 @@
 import { useState } from "react";
+import ErrorPage from "./pages/Error";
+
 import "./App.css";
-import Navigation from "./components/Navigation";
+import { Route, Routes } from "react-router-dom";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
   const [count, setCount] = useState(0);
-  const listNames = ["thing", "groceries"];
+
   return (
-    <div className="App">
-      <Navigation></Navigation>
-      <div>
-        <div>
-          <h1>Todos</h1>
-          <p>Get more done</p>
-        </div>
-        <div></div>
-        <div>
-          <p>
-            Welcome to [App Name] - The Ultimate To-Do List App! Are you tired
-            of juggling multiple tasks and struggling to stay organized? Do you
-            wish you had a simple and efficient way to manage your to-do list?
-            Look no further than [App Name], the perfect solution for all your
-            task management needs. With [App Name], you can easily create,
-            organize, and prioritize your to-do list in one central location.
-            Whether you're planning a big project, running errands, or just
-            trying to keep track of your daily tasks, our app makes it easy to
-            stay on top of everything. Our intuitive user interface allows you
-            to quickly add tasks, set due dates and reminders, and mark items as
-            complete with just a few taps. Plus, you can create custom tags to
-            help you categorize your tasks and filter your to-do list by
-            priority, deadline, and more. But that's not all - [App Name] also
-            comes loaded with powerful features designed to help you stay
-            productive and focused. From smart suggestions that predict what you
-            need to do next, to helpful insights that show you how you're
-            spending your time, our app is packed with tools to help you stay on
-            top of your game. So what are you waiting for? Try [App Name] today
-            and discover the easiest and most effective way to manage your to-do
-            list. With our app, you'll never miss a task or deadline again, and
-            you'll be amazed at how much more you can accomplish each day.
-            Download [App Name] now and start getting things done!
-          </p>
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route path={"/"} element={<LandingPage />} />
+      <Route path={"/todo"} element={<div>rock you like a hurricane</div>} />
+      <Route path={"*"} element={<ErrorPage />} />
+    </Routes>
+
+    // <div className="App">
+    //   <div>
+    //     <a href="https://vitejs.dev" target="_blank">
+    //       <img src={viteLogo} className="logo" alt="Vite logo" />
+    //     </a>
+    //     <a href="https://reactjs.org" target="_blank">
+    //       <img src={reactLogo} className="logo react" alt="React logo" />
+    //     </a>
+    //   </div>
+    //   <h1>Vite + React</h1>
+    //   <div className="card">
+    //     <button onClick={() => setCount((count) => count + 1)}>
+    //       count is {count}
+    //     </button>
+    //     <p>
+    //       Edit <code>src/App.tsx</code> and save to test HMR
+    //     </p>
+    //   </div>
+    //   <p className="read-the-docs">
+    //     Click on the Vite and React logos to learn more
+    //   </p>
+    // </div>
   );
 }
 

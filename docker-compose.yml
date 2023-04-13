@@ -13,34 +13,38 @@ services:
       - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
     volumes:
       - db:/var/lib/postgres
-  # client:
-  #   depends_on:
-  #     - app
-  #   build: ./web-client
-  #   restart: unless-stopped
-  #   env_file: ./.env
-  #   volumes:
-  #     - ./web-client:/web-client
-  #     - /web-client/node_modules
   app:
     depends_on:
       - postgresdb
     build: ./backend
     restart: unless-stopped
     env_file: ./.env
-    ports:
-      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-    volumes:
-      - ./backend/:/backend
-      - /backend/node_modules
     environment:
       - DB_HOST=postgresdb
       - DB_USER=$POSTGRESDB_USER
       - DB_PASSWORD=$POSTGRESDB_PASSWORD
       - DB_NAME=$POSTGRESDB_NAME
       - DB_PORT=$POSTGRESDB_DOCKER_PORT
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    volumes:
+      - ./backend/:/backend
+      - /backend/node_modules
     stdin_open: true
     tty: true
-
+  client:
+    depends_on:
+      - app
+    build: ./web-client
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - BACKEND_URL=$CLIENT_BROWSER_URL
+    ports:
+      - $CLIENT_LOCAL_PORT:$CLIENT_DOCKER_PORT
+    volumes:
+      - ./web-client:/web-client
+      - /web-client/node_modules
+    tty: true
 volumes: 
   db:
