@@ -3,15 +3,17 @@ import ErrorPage from "./pages/Error";
 
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/LandingPage/LandingPage";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <Routes>
       <Route path={"/"} element={<LandingPage />} />
       <Route path={"/todo"} element={<div>rock you like a hurricane</div>} />
+      <Route path={"/login"} element={<Login />} />
+      <Route path={"/signup"} element={<Signup />} />
       <Route path={"*"} element={<ErrorPage />} />
     </Routes>
 
