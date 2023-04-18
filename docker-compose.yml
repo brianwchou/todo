@@ -1,8 +1,5 @@
 version: '3.8'
 
-networks:
-  data-service-network
-
 services:
   postgresdb:
     image: postgres
@@ -36,7 +33,7 @@ services:
       - /backend/node_modules
     stdin_open: true
     tty: true
-    
+
   client:
     depends_on:
       - app
