@@ -1,8 +1,6 @@
 import "./LandingPage.css";
 import NavBar from "../../components/NavBar";
 
-const ulStyle = {};
-
 export default function LandingPage() {
   return (
     <>

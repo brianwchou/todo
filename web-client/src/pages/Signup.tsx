@@ -3,8 +3,8 @@ import NavBar from "../components/NavBar";
 
 export default function Signup() {
   const [signupFields, setSignupFields] = useState({
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
     username: "",
     password: "",
     email: "",
@@ -27,8 +27,8 @@ export default function Signup() {
           <br />
           <input
             type="text"
-            value={signupFields.firstname}
-            name={"firstname"}
+            value={signupFields.firstName}
+            name={"firstName"}
             onChange={captureData}
           ></input>
         </div>
@@ -37,8 +37,8 @@ export default function Signup() {
           <br />
           <input
             type="text"
-            value={signupFields.lastname}
-            name="lastname"
+            value={signupFields.lastName}
+            name="lastName"
             onChange={captureData}
           />
         </div>
@@ -76,6 +76,18 @@ export default function Signup() {
           onClick={function (e) {
             e.preventDefault();
             console.log(signupFields);
+            const url = "/api/signup";
+            fetch(url, {
+              method: "POST",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              cache: "no-cache",
+              body: JSON.stringify(signupFields),
+            }).then((response) => {
+              console.log(response);
+            });
           }}
         >
           submit

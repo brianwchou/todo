@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
 
 app.use(json());
-// app.use(urlencoded());
+app.use(urlencoded({ extended: true }));
 
 app.get("/", async (req, res) => {
   try {
@@ -70,6 +70,7 @@ app.post("/signup", async (req, res) => {
     "^(?=.*d)(?=.*[a-zA-Z])(?=.*[A-Z])(?=.*[-#$.%&*])(?=.*[a-zA-Z]).{8,16}$"
   );
   const emailReg = new RegExp("^([w.-]+)@([w-]+)((.(w){2,3})+)$");
+  console.log(req.body);
 
   type Error = { type: string; message: string };
   let errors: Error[] = [];
@@ -102,7 +103,6 @@ app.post("/signup", async (req, res) => {
   }
   const salt = bcrypt.genSaltSync(saltRounds);
   const hash = bcrypt.hashSync(password, salt);
-
   const user = await prisma.user.create({
     data: {
       firstName,
